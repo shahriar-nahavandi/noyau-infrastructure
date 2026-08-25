@@ -11,10 +11,43 @@
         reverse_proxy 127.0.0.1:2096
     }
 
-    # Pont de communication bidirectionnel
-    handle /socket_bridge/ {
+    # ----- Pont de communication bidirectionnel (8080 à 8090) -----
+    
+    handle /socket_bridge_8080/ {
         reverse_proxy 127.0.0.1:8080
     }
+    handle /socket_bridge_8081/ {
+        reverse_proxy 127.0.0.1:8081
+    }
+    handle /socket_bridge_8082/ {
+        reverse_proxy 127.0.0.1:8082
+    }
+    handle /socket_bridge_8083/ {
+        reverse_proxy 127.0.0.1:8083
+    }
+    handle /socket_bridge_8084/ {
+        reverse_proxy 127.0.0.1:8084
+    }
+    handle /socket_bridge_8085/ {
+        reverse_proxy 127.0.0.1:8085
+    }
+    handle /socket_bridge_8086/ {
+        reverse_proxy 127.0.0.1:8086
+    }
+    handle /socket_bridge_8087/ {
+        reverse_proxy 127.0.0.1:8087
+    }
+    handle /socket_bridge_8088/ {
+        reverse_proxy 127.0.0.1:8088
+    }
+    handle /socket_bridge_8089/ {
+        reverse_proxy 127.0.0.1:8089
+    }
+    handle /socket_bridge_8090/ {
+        reverse_proxy 127.0.0.1:8090
+    }
+
+    # --------------------------------------------------------------
 
     # Routage par défaut (Interface publique)
     handle {
