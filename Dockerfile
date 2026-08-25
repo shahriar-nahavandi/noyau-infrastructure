@@ -11,9 +11,9 @@ ENV DEBIAN_FRONTEND=noninteractive \
     ADMIN_USER=admin \
     ADMIN_PASS=admin
 
-# Installation des dépendances requises
+# Installation des dépendances requises (gnupg added)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl bash ca-certificates tzdata sqlite3 debian-keyring debian-archive-keyring apt-transport-https \
+    curl bash ca-certificates tzdata sqlite3 debian-keyring debian-archive-keyring apt-transport-https gnupg \
     && curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg \
     && curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list \
     && apt-get update && apt-get install -y caddy \
