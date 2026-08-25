@@ -1,0 +1,24 @@
+# Configuration du serveur web principal
+:3000 {
+    
+    # Point d'accès pour l'interface d'administration
+    handle /sys_admin_core/* {
+        reverse_proxy 127.0.0.1:2053
+    }
+
+    # Distribution des paquets de données
+    handle /sub/* {
+        reverse_proxy 127.0.0.1:2096
+    }
+
+    # Pont de communication bidirectionnel
+    handle /socket_bridge/ {
+        reverse_proxy 127.0.0.1:8080
+    }
+
+    # Routage par défaut (Interface publique)
+    handle {
+        root * /var/www/html
+        file_server
+    }
+}
