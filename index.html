@@ -1,25 +1,403 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maintenance du Système</title>
-    <style>
-        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        .container { text-align: center; max-width: 600px; padding: 40px; background: #1e293b; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid #334155; }
-        h1 { font-size: 2.2rem; margin-bottom: 15px; font-weight: 600; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        p { font-size: 1.1rem; color: #94a3b8; line-height: 1.6; margin-bottom: 30px; }
-        .loader { border: 3px solid #334155; border-top: 3px solid #38bdf8; border-radius: 50%; width: 45px; height: 45px; animation: spin 1s linear infinite; margin: 0 auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .footer { margin-top: 35px; font-size: 0.85rem; color: #475569; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maintenance du Système — Services d'Infrastructure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#04070f; --bg2:#070d1a; --cyan:#22d3ee; --blue:#3b82f6; --violet:#8b5cf6;
+  --text:#e6f1ff; --muted:#94a3b8; --line:rgba(255,255,255,.08);
+  --glass:rgba(255,255,255,.04);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:'Outfit',system-ui,sans-serif; overflow-x:hidden;
+}
+body::before{
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    linear-gradient(rgba(34,211,238,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(34,211,238,.04) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse at 50% 0%,#000 30%,transparent 80%);
+}
+::selection{background:var(--cyan);color:#04070f}
+h1,h2,h3{line-height:1.15}
+img{display:block;max-width:100%}
+
+/* ---------- NAV ---------- */
+nav{
+  position:fixed; top:0; left:0; right:0; z-index:50;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:18px 5vw; backdrop-filter:blur(14px);
+  background:rgba(4,7,15,.55); border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:12px;font-weight:600;letter-spacing:.4px}
+.brand .dot{width:10px;height:10px;border-radius:50%;background:var(--cyan);
+  box-shadow:0 0 12px var(--cyan); animation:pulse 1.6s infinite}
+.badge{
+  font-family:'JetBrains Mono',monospace; font-size:.72rem; letter-spacing:.12em;
+  text-transform:uppercase; color:#fbbf24;
+  border:1px solid rgba(251,191,36,.4); background:rgba(251,191,36,.08);
+  padding:8px 16px; border-radius:999px; display:flex; align-items:center; gap:8px;
+}
+.badge::before{content:"";width:7px;height:7px;border-radius:50%;background:#fbbf24;animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.8)}}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0}
+.hero-bg img{width:100%;height:100%;object-fit:cover;animation:kenburns 22s ease-in-out infinite alternate;filter:saturate(1.15)}
+@keyframes kenburns{from{transform:scale(1) translateY(0)}to{transform:scale(1.15) translateY(-2%)}}
+.hero-bg::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(4,7,15,.75) 0%,rgba(4,7,15,.55) 45%,var(--bg) 100%)}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:900px;padding:140px 24px 80px}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.35em;
+  text-transform:uppercase;color:var(--cyan);margin-bottom:22px;
+}
+.hero h1{
+  font-size:clamp(2.6rem,7vw,5.2rem);font-weight:800;letter-spacing:-.02em;
+  background:linear-gradient(100deg,#fff 20%,var(--cyan) 55%,var(--violet) 90%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 60px rgba(34,211,238,.25);
+}
+.hero h2{font-size:clamp(1.1rem,2.6vw,1.6rem);font-weight:300;color:var(--muted);margin:14px 0 26px;letter-spacing:.06em}
+.hero p.lead{max-width:640px;margin:0 auto 44px;color:#cbd5e1;font-size:1.06rem;line-height:1.8}
+
+.progress-wrap{max-width:560px;margin:0 auto 40px;text-align:left}
+.progress-label{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;
+  font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.progress-label b{color:var(--cyan)}
+.progress{height:8px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;border:1px solid var(--line)}
+.progress-bar{height:100%;width:0%;border-radius:99px;
+  background:linear-gradient(90deg,var(--blue),var(--cyan),var(--violet));
+  background-size:200% 100%;animation:shimmer 2.5s linear infinite;
+  box-shadow:0 0 18px rgba(34,211,238,.6);transition:width 2.2s cubic-bezier(.2,.8,.2,1)}
+@keyframes shimmer{from{background-position:0% 0}to{background-position:200% 0}}
+
+.countdown{display:flex;gap:16px;justify-content:center}
+.cd-box{
+  min-width:96px;padding:18px 10px;border-radius:16px;background:var(--glass);
+  border:1px solid var(--line);backdrop-filter:blur(10px);
+}
+.cd-box span{font-family:'JetBrains Mono',monospace;font-size:2.1rem;font-weight:700;color:var(--cyan)}
+.cd-box small{display:block;margin-top:6px;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:2;
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.3em;color:var(--muted);
+  animation:float 2.4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,8px)}}
+
+/* ---------- TICKER ---------- */
+.ticker{border-block:1px solid var(--line);background:var(--bg2);overflow:hidden;padding:14px 0}
+.ticker-track{display:flex;gap:56px;width:max-content;animation:marquee 32s linear infinite;
+  font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.ticker-track span{display:flex;align-items:center;gap:56px;white-space:nowrap}
+.ticker-track i{color:var(--cyan);font-style:normal}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ---------- SECTIONS ---------- */
+section{padding:110px 5vw}
+.section-head{text-align:center;max-width:720px;margin:0 auto 64px}
+.section-head .eyebrow{margin-bottom:14px}
+.section-head h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800}
+.section-head p{color:var(--muted);margin-top:16px;line-height:1.8}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;max-width:1100px;margin:0 auto}
+.stat{background:var(--glass);border:1px solid var(--line);border-radius:20px;padding:34px 20px;text-align:center;
+  transition:transform .35s,border-color .35s,box-shadow .35s}
+.stat:hover{transform:translateY(-6px);border-color:rgba(34,211,238,.45);box-shadow:0 18px 50px rgba(34,211,238,.12)}
+.stat b{font-family:'JetBrains Mono',monospace;font-size:2.2rem;color:var(--cyan)}
+.stat span{display:block;margin-top:8px;color:var(--muted);font-size:.9rem;letter-spacing:.05em}
+
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:26px;max-width:1200px;margin:0 auto}
+.card{border-radius:22px;overflow:hidden;background:var(--glass);border:1px solid var(--line);
+  transition:transform .4s,box-shadow .4s,border-color .4s}
+.card:hover{transform:translateY(-8px);border-color:rgba(139,92,246,.5);box-shadow:0 24px 60px rgba(59,130,246,.18)}
+.card .thumb{height:220px;overflow:hidden}
+.card .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .8s ease}
+.card:hover .thumb img{transform:scale(1.1)}
+.card-body{padding:28px}
+.card-body h3{font-size:1.25rem;margin-bottom:12px}
+.card-body p{color:var(--muted);line-height:1.75;font-size:.95rem}
+.tag{display:inline-block;margin-bottom:14px;font-family:'JetBrains Mono',monospace;font-size:.66rem;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--violet);
+  border:1px solid rgba(139,92,246,.4);border-radius:999px;padding:5px 12px}
+
+/* parallax banner */
+.banner{position:relative;height:420px;display:flex;align-items:center;justify-content:center;overflow:hidden;text-align:center}
+.banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.45) saturate(1.2)}
+.banner blockquote{position:relative;z-index:2;font-size:clamp(1.4rem,3.4vw,2.4rem);font-weight:600;max-width:800px;padding:0 24px;
+  text-shadow:0 4px 30px rgba(0,0,0,.6)}
+.banner blockquote em{color:var(--cyan);font-style:normal}
+
+/* timeline */
+.timeline{max-width:760px;margin:0 auto;position:relative;padding-left:34px}
+.timeline::before{content:"";position:absolute;left:10px;top:6px;bottom:6px;width:2px;
+  background:linear-gradient(180deg,var(--cyan),var(--violet),transparent)}
+.t-item{position:relative;margin-bottom:38px;background:var(--glass);border:1px solid var(--line);
+  border-radius:16px;padding:22px 26px;transition:border-color .3s}
+.t-item:hover{border-color:rgba(34,211,238,.4)}
+.t-item::before{content:"";position:absolute;left:-30px;top:28px;width:12px;height:12px;border-radius:50%;
+  background:var(--bg);border:3px solid var(--cyan)}
+.t-item.done::before{background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+.t-item.now::before{background:#fbbf24;border-color:#fbbf24;box-shadow:0 0 14px #fbbf24;animation:pulse 1.4s infinite}
+.t-item.todo::before{border-color:var(--muted)}
+.t-time{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:.8rem;letter-spacing:.15em}
+.t-item h3{margin:8px 0 6px;font-size:1.1rem}
+.t-item p{color:var(--muted);font-size:.92rem;line-height:1.7}
+.status{float:right;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.15em;
+  text-transform:uppercase;padding:6px 12px;border-radius:999px}
+.status.ok{color:var(--cyan);background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.35)}
+.status.run{color:#fbbf24;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.4)}
+.status.wait{color:var(--muted);background:rgba(148,163,184,.08);border:1px solid var(--line)}
+
+/* why / split */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;max-width:1200px;margin:0 auto}
+.split .frame{position:relative;border-radius:24px;overflow:hidden;border:1px solid var(--line)}
+.split .frame img{width:100%;height:100%;object-fit:cover;transition:transform 1s}
+.split .frame:hover img{transform:scale(1.06)}
+.split .frame::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 80px rgba(34,211,238,.15)}
+.split h2{font-size:clamp(1.7rem,3.4vw,2.5rem);margin-bottom:20px}
+.split p{color:var(--muted);line-height:1.85;margin-bottom:26px}
+.check{list-style:none;display:grid;gap:14px}
+.check li{display:flex;gap:14px;align-items:center;color:#cbd5e1}
+.check li::before{content:"✓";flex:0 0 26px;height:26px;border-radius:8px;display:grid;place-items:center;
+  color:var(--cyan);background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.4);font-size:.8rem}
+
+/* gallery */
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:1200px;margin:0 auto}
+.g-item{position:relative;border-radius:18px;overflow:hidden;height:240px;border:1px solid var(--line)}
+.g-item img{width:100%;height:100%;object-fit:cover;transition:transform .9s,filter .5s}
+.g-item:hover img{transform:scale(1.12);filter:brightness(1.1)}
+.g-item figcaption{position:absolute;inset:auto 0 0 0;padding:40px 18px 16px;
+  background:linear-gradient(transparent,rgba(4,7,15,.9));font-size:.85rem;letter-spacing:.08em;color:#e2e8f0}
+.g-item figcaption b{color:var(--cyan)}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:56px 5vw;text-align:center;background:var(--bg2)}
+footer .brand{justify-content:center;margin-bottom:16px}
+footer p{color:var(--muted);font-size:.9rem}
+footer .copy{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:.75rem;letter-spacing:.12em}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .9s ease,transform .9s ease}
+.reveal.visible{opacity:1;transform:none}
+
+@media(max-width:900px){
+  .split{grid-template-columns:1fr}
+  .gallery{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .gallery{grid-template-columns:1fr}
+  .cd-box{min-width:78px}
+  .status{float:none;display:inline-block;margin-top:10px}
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>Mise à jour de l'infrastructure</h1>
-        <p>Nos services sont actuellement en cours de maintenance pour des améliorations de performance. Le système sera de nouveau en ligne sous peu. Merci de votre patience.</p>
-        <div class="loader"></div>
-        <div class="footer">&copy; 2026 Services d'Infrastructure. Tous droits réservés.</div>
+
+<nav>
+  <div class="brand"><span class="dot"></span> Services d'Infrastructure</div>
+  <div class="badge">Maintenance en cours</div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="hero-bg"><img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1920&auto=format&fit=crop" alt="Centre de données"></div>
+  <div class="hero-content">
+    <div class="eyebrow">// Statut du système</div>
+    <h1>Maintenance du Système</h1>
+    <h2>Mise à jour de l'infrastructure</h2>
+    <p class="lead">Nos services sont actuellement en cours de maintenance pour des améliorations de performance. Le système sera de nouveau en ligne sous peu. Merci de votre patience.</p>
+
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Progression de la mise à jour</span><b id="pct">0%</b></div>
+      <div class="progress"><div class="progress-bar" id="bar"></div></div>
     </div>
+
+    <div class="countdown" aria-label="Temps estimé avant retour en ligne">
+      <div class="cd-box"><span id="hh">00</span><small>Heures</small></div>
+      <div class="cd-box"><span id="mm">00</span><small>Minutes</small></div>
+      <div class="cd-box"><span id="ss">00</span><small>Secondes</small></div>
+    </div>
+  </div>
+  <div class="scroll-hint">▼ DÉFILER POUR EXPLORER</div>
+</header>
+
+<!-- ============ TICKER ============ -->
+<div class="ticker"><div class="ticker-track" id="ticker">
+  <span>Optimisation des performances <i>◆</i> Mise à niveau des serveurs <i>◆</i> Sauvegarde des données <i>◆</i> Renforcement de la sécurité <i>◆</i> Calibration du réseau <i>◆</i> Tests de validation <i>◆</i></span>
+</div></div>
+
+<!-- ============ STATS ============ -->
+<section>
+  <div class="stats">
+    <div class="stat reveal"><b>120+</b><span>Serveurs mis à niveau</span></div>
+    <div class="stat reveal"><b>99,99%</b><span>Disponibilité cible</span></div>
+    <div class="stat reveal"><b>24/7</b><span>Surveillance active</span></div>
+    <div class="stat reveal"><b>×3</b><span>Vitesse accrue</span></div>
+  </div>
+</section>
+
+<!-- ============ CARDS ============ -->
+<section>
+  <div class="section-head reveal">
+    <div class="eyebrow">// Ce qui change</div>
+    <h2>Au cœur de la mise à niveau</h2>
+    <p>Chaque composant de notre infrastructure est modernisé pour vous offrir une expérience plus fluide et plus fiable.</p>
+  </div>
+  <div class="cards">
+    <article class="card reveal">
+      <div class="thumb"><img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=1600&auto=format&fit=crop" alt="Matériel serveur nouvelle génération" loading="lazy"></div>
+      <div class="card-body">
+        <span class="tag">Matériel</span>
+        <h3>Performance accrue</h3>
+        <p>Des serveurs nouvelle génération pour des temps de réponse jusqu'à trois fois plus rapides sur l'ensemble de nos services.</p>
+      </div>
+    </article>
+    <article class="card reveal">
+      <div class="thumb"><img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1600&auto=format&fit=crop" alt="Réseau mondial interconnecté" loading="lazy"></div>
+      <div class="card-body">
+        <span class="tag">Réseau</span>
+        <h3>Réseau mondial optimisé</h3>
+        <p>Un maillage interconnecté à l'échelle mondiale afin de réduire la latence, où que vous soyez.</p>
+      </div>
+    </article>
+    <article class="card reveal">
+      <div class="thumb"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1600&auto=format&fit=crop" alt="Salle de contrôle" loading="lazy"></div>
+      <div class="card-body">
+        <span class="tag">Opérations</span>
+        <h3>Supervision en temps réel</h3>
+        <p>Nos équipes veillent 24/7 au bon déroulement de chaque étape de la maintenance, avec des contrôles continus.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ BANNER ============ -->
+<div class="banner">
+  <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1920&auto=format&fit=crop" alt="Circuits optimisés" loading="lazy">
+  <blockquote>« Une infrastructure <em>plus rapide</em>, <em>plus fiable</em>, <em>plus sûre</em>. »</blockquote>
+</div>
+
+<!-- ============ TIMELINE ============ -->
+<section>
+  <div class="section-head reveal">
+    <div class="eyebrow">// Étapes en direct</div>
+    <h2>Journal de maintenance</h2>
+    <p>Suivez en toute transparence l'avancement des opérations planifiées.</p>
+  </div>
+  <div class="timeline">
+    <div class="t-item done reveal"><span class="status ok">Terminé</span>
+      <div class="t-time">02:00 — UTC</div><h3>Sauvegarde complète des données</h3>
+      <p>Instantanés chiffrés de l'ensemble des bases de production, vérifiés et répliqués.</p>
+    </div>
+    <div class="t-item done reveal"><span class="status ok">Terminé</span>
+      <div class="t-time">03:30 — UTC</div><h3>Mise à niveau du matériel</h3>
+      <p>Remplacement et extension des nœuds de calcul par la nouvelle génération de serveurs.</p>
+    </div>
+    <div class="t-item now reveal"><span class="status run">En cours</span>
+      <div class="t-time">05:00 — UTC</div><h3>Optimisation des performances</h3>
+      <p>Calibration des équilibreurs de charge, du cache et des requêtes pour des améliorations de performance.</p>
+    </div>
+    <div class="t-item todo reveal"><span class="status wait">À venir</span>
+      <div class="t-time">07:00 — UTC</div><h3>Tests &amp; validation</h3>
+      <p>Batteries de tests de charge, de sécurité et de bascule avant la réouverture.</p>
+    </div>
+    <div class="t-item todo reveal"><span class="status wait">À venir</span>
+      <div class="t-time">08:00 — UTC</div><h3>Retour en ligne</h3>
+      <p>Le système sera de nouveau en ligne sous peu. Merci de votre patience.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY ============ -->
+<section>
+  <div class="split">
+    <div class="frame reveal"><img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1600&auto=format&fit=crop" alt="Infrastructure cloud en maintenance" loading="lazy"></div>
+    <div class="reveal">
+      <div class="eyebrow">// Notre engagement</div>
+      <h2>Pourquoi cette maintenance&nbsp;?</h2>
+      <p>Nos services sont actuellement en cours de maintenance pour des améliorations de performance. Cette fenêtre planifiée nous permet de préparer l'infrastructure de demain, sans compromis sur vos données.</p>
+      <ul class="check">
+        <li>Améliorations de performance durables</li>
+        <li>Renforcement de la sécurité de bout en bout</li>
+        <li>Expansion de la capacité cloud</li>
+        <li>Zéro perte de données garantie</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GALLERY ============ -->
+<section>
+  <div class="section-head reveal">
+    <div class="eyebrow">// En images</div>
+    <h2>Galerie de l'infrastructure</h2>
+  </div>
+  <div class="gallery">
+    <figure class="g-item reveal"><img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy"><figcaption><b>01</b> — Centre de données principal</figcaption></figure>
+    <figure class="g-item reveal"><img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy"><figcaption><b>02</b> — Réseau mondial</figcaption></figure>
+    <figure class="g-item reveal"><img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy"><figcaption><b>03</b> — Matériel nouvelle génération</figcaption></figure>
+    <figure class="g-item reveal"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy"><figcaption><b>04</b> — Salle de contrôle</figcaption></figure>
+    <figure class="g-item reveal"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy"><figcaption><b>05</b> — Circuits optimisés</figcaption></figure>
+    <figure class="g-item reveal"><img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1200&auto=format&fit=crop" alt="" loading="lazy"><figcaption><b>06</b> — Cloud hybride</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="brand"><span class="dot"></span> Services d'Infrastructure</div>
+  <p>Nous construisons l'infrastructure de demain. Le système sera de nouveau en ligne sous peu.</p>
+  <p class="copy">© 2026 Services d'Infrastructure. Tous droits réservés.</p>
+</footer>
+
+<script>
+/* ---- Compte à rebours ---- */
+const target = Date.now() + (2*3600 + 47*60 + 12) * 1000;
+const pad = n => String(n).padStart(2,'0');
+setInterval(() => {
+  let d = Math.max(0, target - Date.now()) / 1000;
+  document.getElementById('hh').textContent = pad(Math.floor(d/3600));
+  document.getElementById('mm').textContent = pad(Math.floor(d/60)%60);
+  document.getElementById('ss').textContent = pad(Math.floor(d)%60);
+}, 1000);
+
+/* ---- Barre de progression ---- */
+const GOAL = 68;
+window.addEventListener('load', () => {
+  document.getElementById('bar').style.width = GOAL + '%';
+  const t0 = performance.now();
+  (function tick(t){
+    const k = Math.min(1,(t-t0)/2200), e = 1-Math.pow(1-k,3);
+    document.getElementById('pct').textContent = Math.round(GOAL*e) + '%';
+    if(k<1) requestAnimationFrame(tick);
+  })(t0);
+});
+
+/* ---- Ticker sans couture ---- */
+const tk = document.getElementById('ticker');
+tk.innerHTML += tk.innerHTML;
+
+/* ---- Apparition au défilement ---- */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); }
+}), {threshold:.15});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ---- Filet de sécurité images ---- */
+const FALLBACK = 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1600&auto=format&fit=crop';
+document.querySelectorAll('img').forEach(im => {
+  im.addEventListener('error', () => { if (im.src !== FALLBACK) im.src = FALLBACK; }, {once:true});
+});
+</script>
 </body>
 </html>
