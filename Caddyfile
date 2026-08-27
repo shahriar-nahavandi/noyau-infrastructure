@@ -3,7 +3,7 @@
 # --------------------------------------------------------------
 (core_router) {
     reverse_proxy 127.0.0.1:{args.0} {
-        flush_interval -1
+        flush_interval -1s
     }
 }
 
