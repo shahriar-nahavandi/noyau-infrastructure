@@ -1,3 +1,4 @@
+# Configuration du serveur web principal
 :3000 {
     
     # Point d'accès pour l'interface d'administration
@@ -10,18 +11,65 @@
         reverse_proxy 127.0.0.1:2096
     }
 
-    # ----- Pont de communication bidirectionnel -----
-    handle /socket_bridge_8080/* { reverse_proxy 127.0.0.1:8080 }
-    handle /socket_bridge_8081/* { reverse_proxy 127.0.0.1:8081 }
-    handle /socket_bridge_8082/* { reverse_proxy 127.0.0.1:8082 }
-    handle /socket_bridge_8083/* { reverse_proxy 127.0.0.1:8083 }
-    handle /socket_bridge_8084/* { reverse_proxy 127.0.0.1:8084 }
-    handle /socket_bridge_8085/* { reverse_proxy 127.0.0.1:8085 }
-    handle /socket_bridge_8086/* { reverse_proxy 127.0.0.1:8086 }
-    handle /socket_bridge_8087/* { reverse_proxy 127.0.0.1:8087 }
-    handle /socket_bridge_8088/* { reverse_proxy 127.0.0.1:8088 }
-    handle /socket_bridge_8089/* { reverse_proxy 127.0.0.1:8089 }
-    handle /socket_bridge_8090/* { reverse_proxy 127.0.0.1:8090 }
+    # ----- Pont de communication bidirectionnel (Optimisé pour XHTTP & WS) -----
+    
+    handle /socket_bridge_8080/* {
+        reverse_proxy 127.0.0.1:8080 {
+            flush_interval -1
+        }
+    }
+    handle /socket_bridge_8081/* {
+        reverse_proxy 127.0.0.1:8081 {
+            flush_interval -1
+        }
+    }
+    handle /socket_bridge_8082/* {
+        reverse_proxy 127.0.0.1:8082 {
+            flush_interval -1
+        }
+    }
+    handle /socket_bridge_8083/* {
+        reverse_proxy 127.0.0.1:8083 {
+            flush_interval -1
+        }
+    }
+    handle /socket_bridge_8084/* {
+        reverse_proxy 127.0.0.1:8084 {
+            flush_interval -1
+        }
+    }
+    handle /socket_bridge_8085/* {
+        reverse_proxy 127.0.0.1:8085 {
+            flush_interval -1
+        }
+    }
+    handle /socket_bridge_8086/* {
+        reverse_proxy 127.0.0.1:8086 {
+            flush_interval -1
+        }
+    }
+    handle /socket_bridge_8087/* {
+        reverse_proxy 127.0.0.1:8087 {
+            flush_interval -1
+        }
+    }
+    handle /socket_bridge_8088/* {
+        reverse_proxy 127.0.0.1:8088 {
+            flush_interval -1
+        }
+    }
+    handle /socket_bridge_8089/* {
+        reverse_proxy 127.0.0.1:8089 {
+            flush_interval -1
+        }
+    }
+    handle /socket_bridge_8090/* {
+        reverse_proxy 127.0.0.1:8090 {
+            flush_interval -1
+        }
+    }
+
+    # --------------------------------------------------------------
 
     # Routage par défaut (Interface publique)
     handle {
