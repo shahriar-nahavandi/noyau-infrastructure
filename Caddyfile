@@ -4,9 +4,6 @@
 (core_router) {
     reverse_proxy 127.0.0.1:{args.0} {
         flush_interval -1
-        transport http {
-            versions h1 h2c 2
-        }
     }
 }
 
