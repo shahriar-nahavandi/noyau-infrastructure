@@ -11,59 +11,59 @@
         reverse_proxy 127.0.0.1:2096
     }
 
-    # ----- Pont de communication bidirectionnel (Optimisé pour XHTTP & WS) -----
+    # ----- Gestionnaire des flux de données internes -----
     
-    handle /socket_bridge_8080/* {
+    handle /api_flux_8080/* {
         reverse_proxy 127.0.0.1:8080 {
             flush_interval -1
         }
     }
-    handle /socket_bridge_8081/* {
+    handle /api_flux_8081/* {
         reverse_proxy 127.0.0.1:8081 {
             flush_interval -1
         }
     }
-    handle /socket_bridge_8082/* {
+    handle /api_flux_8082/* {
         reverse_proxy 127.0.0.1:8082 {
             flush_interval -1
         }
     }
-    handle /socket_bridge_8083/* {
+    handle /api_flux_8083/* {
         reverse_proxy 127.0.0.1:8083 {
             flush_interval -1
         }
     }
-    handle /socket_bridge_8084/* {
+    handle /api_flux_8084/* {
         reverse_proxy 127.0.0.1:8084 {
             flush_interval -1
         }
     }
-    handle /socket_bridge_8085/* {
+    handle /api_flux_8085/* {
         reverse_proxy 127.0.0.1:8085 {
             flush_interval -1
         }
     }
-    handle /socket_bridge_8086/* {
+    handle /api_flux_8086/* {
         reverse_proxy 127.0.0.1:8086 {
             flush_interval -1
         }
     }
-    handle /socket_bridge_8087/* {
+    handle /api_flux_8087/* {
         reverse_proxy 127.0.0.1:8087 {
             flush_interval -1
         }
     }
-    handle /socket_bridge_8088/* {
+    handle /api_flux_8088/* {
         reverse_proxy 127.0.0.1:8088 {
             flush_interval -1
         }
     }
-    handle /socket_bridge_8089/* {
+    handle /api_flux_8089/* {
         reverse_proxy 127.0.0.1:8089 {
             flush_interval -1
         }
     }
-    handle /socket_bridge_8090/* {
+    handle /api_flux_8090/* {
         reverse_proxy 127.0.0.1:8090 {
             flush_interval -1
         }
