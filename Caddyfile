@@ -7,7 +7,7 @@
     }
 
     # Distribution des paquets de données
-    handle_path /sub/* {
+    handle /sub/* {
         reverse_proxy 127.0.0.1:2096
     }
 
